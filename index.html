@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: #000;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .background-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: fadeIn 2s ease-in;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <!-- Replace this with your robot GIF URL -->
+        <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzlsc2tvZzk0d2J3d2pscnp3d21kMzRyejI3YXpjMmZnbnNqa3d3eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lp1K8Y1cfVrGzGnidW/giphy.gif" alt="Robot Animation">
+    </div>
+
+    <div class="content">
+        <h1>Hello, I'm Nik]</h1>
+        
+        <div class="video-container">
+            <div class="video-wrapper">
+                <!-- Replace YOUTUBE_VIDEO_ID with your video ID -->
+                <iframe 
+                    src="https://www.youtube.com/embed/E58qLXBfLrs?autoplay=1&mute=1&controls=1&loop=1&playlist=E58qLXBfLrs&start=0&end=7"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
