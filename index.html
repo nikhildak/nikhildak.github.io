@@ -116,3 +116,236 @@
     </div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .chat-container {
+            max-width: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background-color: #4a6fa5;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+            clear: both;
+        }
+        
+        .bot-message {
+            background-color: #e6e6e6;
+            float: left;
+        }
+        
+        .user-message {
+            background-color: #4a6fa5;
+            color: #fff;
+            float: right;
+        }
+        
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #e6e6e6;
+            background-color: #fff;
+        }
+        
+        #user-input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        #send-button {
+            background-color: #4a6fa5;
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4a6fa5;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container hidden" id="chat-container">
+        <div class="chat-header">Chat with us</div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <button class="chat-toggle" id="chat-toggle">💬</button>
+    
+    <script>
+        // Chat responses configuration
+        const botResponses = {
+            greetings: ['hello', 'hi', 'hey', 'howdy', 'hola'],
+            greetingResponses: ['Hello! How can I help you today?', 'Hi there! What can I assist you with?', 'Hey! How can I be of service?'],
+            
+            about: ['who are you', 'what are you', 'about you', 'tell me about'],
+            aboutResponses: ['I\'m a simple chatbot designed to help answer questions about our website and services.', 'I\'m your virtual assistant. I can help you navigate our site and answer basic questions.'],
+            
+            help: ['help', 'support', 'assistance'],
+            helpResponses: ['I can help with general information, product questions, and basic support. What do you need help with?', 'I\'m here to assist you! Whether you need information or support, just let me know what you\'re looking for.'],
+            
+            thanks: ['thanks', 'thank you', 'appreciate'],
+            thanksResponses: ['You\'re welcome!', 'Happy to help!', 'Anytime!', 'My pleasure!'],
+            
+            bye: ['bye', 'goodbye', 'see you', 'farewell'],
+            byeResponses: ['Goodbye! Have a great day!', 'See you later!', 'Take care!', 'Farewell! Feel free to chat again if you need anything.'],
+            
+            fallback: ['I\'m not sure I understand. Could you rephrase that?', 'I don\'t have information on that yet. Can I help with something else?', 'I\'m still learning! Could you try asking in a different way?']
+        };
+        
+        // Get DOM elements
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatContainer = document.getElementById('chat-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        
+        // Toggle chat visibility
+        chatToggle.addEventListener('click', () => {
+            chatContainer.classList.toggle('hidden');
+            if (!chatContainer.classList.contains('hidden') && chatMessages.children.length === 0) {
+                // Add welcome message when chat is first opened
+                addBotMessage('Hi there! How can I help you today?');
+            }
+        });
+        
+        // Send message when button is clicked
+        sendButton.addEventListener('click', sendMessage);
+        
+        // Send message when Enter key is pressed
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Function to send user message and get bot response
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+            
+            // Add user message to chat
+            addUserMessage(message);
+            
+            // Clear input field
+            userInput.value = '';
+            
+            // Get bot response with a slight delay to simulate thinking
+            setTimeout(() => {
+                const response = getBotResponse(message.toLowerCase());
+                addBotMessage(response);
+            }, 500);
+        }
+        
+        // Function to add a user message to the chat
+        function addUserMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user-message');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Function to add a bot message to the chat
+        function addBotMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'bot-message');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Function to get a bot response based on the user input
+        function getBotResponse(input) {
+            // Check for keywords in the input
+            if (containsAnyKeyword(input, botResponses.greetings)) {
+                return getRandomResponse(botResponses.greetingResponses);
+            } else if (containsAnyKeyword(input, botResponses.about)) {
+                return getRandomResponse(botResponses.aboutResponses);
+            } else if (containsAnyKeyword(input, botResponses.help)) {
+                return getRandomResponse(botResponses.helpResponses);
+            } else if (containsAnyKeyword(input, botResponses.contact)) {
+                return getRandomResponse(botResponses.contactResponses);
+            } else if (containsAnyKeyword(input, botResponses.thanks)) {
+                return getRandomResponse(botResponses.thanksResponses);
+            } else if (containsAnyKeyword(input, botResponses.bye)) {
+                return getRandomResponse(botResponses.byeResponses);
+            } else {
+                // No keywords matched, use fallback response
+                return getRandomResponse(botResponses.fallback);
+            }
+        }
+        
+        // Helper function to check if input contains any of the keywords
+        function containsAnyKeyword(input, keywords) {
+            return keywords.some(keyword => input.includes(keyword));
+        }
+        
+        // Helper function to get a random response from an array
+        function getRandomResponse(responses) {
+            const randomIndex = Math.floor(Math.random() * responses.length);
+            return responses[randomIndex];
+        }
+    </script>
+</body>
+</html>
